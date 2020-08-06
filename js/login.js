@@ -24,6 +24,7 @@ var googleUser = {};
       // Retrieve the singleton for the GoogleAuth library and set up the client.
       auth2 = gapi.auth2.init({
         client_id: CLIENT_ID,
+        redirect_uri: 'https://dsoto-uy.github.io/repo-jap/index.html',
         cookiepolicy: 'single_host_origin',
         // Request scopes in addition to 'profile' and 'email'
         //scope: 'additional_scope'
