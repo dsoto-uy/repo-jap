@@ -139,3 +139,17 @@ a.custom-card:hover {
 .checked {
   color: orange;
 }
+
+.hasProductCost{
+  position: relative;
+}
+
+.bottomCost{
+  position:absolute;                  
+  bottom:0;                          
+  right:0;
+}
+
+.bottomCost h3{
+  padding-right: 15px;
+}
