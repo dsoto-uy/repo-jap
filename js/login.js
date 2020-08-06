@@ -22,20 +22,20 @@ var googleUser = {};
     gapi.load('auth2', function(){            
       auth2 = gapi.auth2.init({
         client_id: CLIENT_ID,                
+        ux_mode: 'redirect',
+        redirect_uri: 'index.html',
         cookiepolicy: 'single_host_origin',      
       });
-      alert("asdasds");
-      alert(googleUser.getBasicProfile().getName());
+      attachSignin(document.getElementById('botonGoogle'));
     });
   };
 
-  /*function attachSignin(element) {
+  function attachSignin(element) {
     console.log(element.id);
     auth2.attachClickHandler(element, {},
         function(googleUser) {
-          document.getElementById('botonGoogle').innerText = "Signed in: " +
-              googleUser.getBasicProfile().getName();
+          alert(googleUser.getBasicProfile().getName());
         }, function(error) {
           alert(JSON.stringify(error, undefined, 2));
         });
-  }*/
+  }
