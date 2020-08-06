@@ -26,11 +26,11 @@ var googleUser = {};
         redirect_uri: 'https://dsoto-uy.github.io/repo-jap/index.html',
         cookiepolicy: 'single_host_origin',      
       });
-     /* attachSignin(document.getElementById('botonGoogle'));*/
+      attachSignin(document.getElementById('botonGoogle'));
     });
   };
 
- /* function attachSignin(element) {
+  function attachSignin(element) {
     console.log(element.id);
     auth2.attachClickHandler(element, {},
         function(googleUser) {
@@ -38,4 +38,4 @@ var googleUser = {};
         }, function(error) {
           alert(JSON.stringify(error, undefined, 2));
         });
-  }*/
+  }
