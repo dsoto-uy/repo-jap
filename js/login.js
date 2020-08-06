@@ -23,7 +23,7 @@ var googleUser = {};
       auth2 = gapi.auth2.init({
         client_id: CLIENT_ID,                
         ux_mode: 'redirect',
-        redirect_uri: 'index.html',
+        redirect_uri: 'https://dsoto-uy.github.io/repo-jap/index.html',
         cookiepolicy: 'single_host_origin',      
       });
       attachSignin(document.getElementById('botonGoogle'));
