@@ -1,7 +1,7 @@
 //Función que se ejecuta una vez que se haya lanzado el evento de
 //que el documento se encuentra cargado, es decir, se encuentran todos los
 //elementos HTML presentes.
-const CLIENT_ID = "880069710415-vp1tu8ijf94aoc1u5pu68gbtlfa6jn27.apps.googleusercontent.com";
+const CLIENT_ID = "880069710415-2f4rpegucor1qqghmgke263m6h8g3k39.apps.googleusercontent.com";
 
 document.addEventListener("DOMContentLoaded", function(e){
     showGoogleButton();
