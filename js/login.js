@@ -1,7 +1,8 @@
 //Función que se ejecuta una vez que se haya lanzado el evento de
 //que el documento se encuentra cargado, es decir, se encuentran todos los
 //elementos HTML presentes.
-const CLIENT_ID = "880069710415-2f4rpegucor1qqghmgke263m6h8g3k39.apps.googleusercontent.com";
+//const CLIENT_ID = "880069710415-2f4rpegucor1qqghmgke263m6h8g3k39.apps.googleusercontent.com";
+const CLIENT_ID = "880069710415-9m83rj0jleuh55bsfct1gart0c9ta3d0.apps.googleusercontent.com";
 document.addEventListener("DOMContentLoaded", function(e){
     showGoogleButton(); 
     startApp();  
@@ -23,7 +24,7 @@ var startApp = function() {
       auth2 = gapi.auth2.init({
         client_id: CLIENT_ID,                
         ux_mode: 'redirect',
-        redirect_uri: 'https://dsoto-uy.github.io/repo-jap/index.html',
+        redirect_uri: 'http://localhost:9999/home.html',
         cookiepolicy: 'single_host_origin', 
         scope: 'profile',          
       });      
