@@ -140,10 +140,6 @@ a.custom-card:hover {
   color: orange;
 }
 
-.hasProductCost{
-  position: relative;
-}
-
 .bottomCost{
   position:absolute;                  
   bottom:0;                          
@@ -152,4 +148,8 @@ a.custom-card:hover {
 
 .bottomCost h3{
   padding-right: 15px;
+}
+
+.hide{
+  display: block
 }

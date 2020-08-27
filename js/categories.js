@@ -6,25 +6,25 @@ var currentSortCriteria = undefined;
 var minCount = undefined;
 var maxCount = undefined;
 
-function sortCategories(criteria, array){
-    let result = [];
-    if (criteria === ORDER_ASC_BY_NAME)
+function sortCategories(criteria, array){ //crea una función para ordenar las categorías, tomando como parámetros un criterio por el que se va a ordenar y la lista de categorías.
+    let result = [];                        //crea un array vacío para guardar la lista ordenada.
+    if (criteria === ORDER_ASC_BY_NAME)     //ingresa acá si el criterio es igual a la constante ORDER_ASC_BY_NAME (orden de nombre ascendente).
     {
-        result = array.sort(function(a, b) {
-            if ( a.name < b.name ){ return -1; }
-            if ( a.name > b.name ){ return 1; }
-            return 0;
+        result = array.sort(function(a, b) {        //Ordena la lista y la guarda en el array RESULT creado anteriormente.
+            if ( a.name < b.name ){ return -1; }    //si a.name < b.name se pone A primero que B (devuelve menor a 0). 
+            if ( a.name > b.name ){ return 1; }     //si a.name > b.name se pone B primero que A (devuelve mayor a 0).
+            return 0;                               //si son iguales se mantienen sin cambios entre ellos (devuelve 0).
         });
-    }else if (criteria === ORDER_DESC_BY_NAME){
+    }else if (criteria === ORDER_DESC_BY_NAME){ //ingresa acá si el criterio es igual a la constante ORDER_DESC_BY_NAME (orden de nombre Descendente).
         result = array.sort(function(a, b) {
             if ( a.name > b.name ){ return -1; }
             if ( a.name < b.name ){ return 1; }
             return 0;
         });
-    }else if (criteria === ORDER_BY_PROD_COUNT){
+    }else if (criteria === ORDER_BY_PROD_COUNT){ //ingresa acá si el criterio es igual a la constante ORDER_BY_PROD_COUNT (orden por cantidad de productos).
         result = array.sort(function(a, b) {
-            let aCount = parseInt(a.productCount);
-            let bCount = parseInt(b.productCount);
+            let aCount = parseInt(a.productCount); //convierte a.productCount al tipo INT y lo guarda en una nueva variable.
+            let bCount = parseInt(b.productCount); //convierte b.productCount al tipo INT y lo guarda en una nueva variable.
 
             if ( aCount > bCount ){ return -1; }
             if ( aCount < bCount ){ return 1; }

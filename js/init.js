@@ -40,8 +40,12 @@ var getJSONData = function(url){
     });
 }
 
-//Función que se ejecuta una vez que se haya lanzado el evento de
-//que el documento se encuentra cargado, es decir, se encuentran todos los
-//elementos HTML presentes.
 document.addEventListener("DOMContentLoaded", function(e){
+  var user = JSON.parse(localStorage.getItem("currentUser"));
+
+  document.getElementById("navBarOptions").innerHTML += `  
+  <a class="py-2 d-none d-md-inline-block" id="profileLink" href="my-profile.html">`
+  +user.firstName+" "+user.lastName+`
+  </a>
+  `;
 });
