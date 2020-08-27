@@ -47,6 +47,7 @@ document.addEventListener("DOMContentLoaded", function (e) {
         maxCost = undefined;
 
         showProductsList(currentProductsArray);
+        filterProducts(productRows);       
     });
 
     document.getElementById("rangeFilterCost").addEventListener("click", function(){
@@ -69,6 +70,7 @@ document.addEventListener("DOMContentLoaded", function (e) {
         }
 
         showProductsList(currentProductsArray);
+        filterProducts(productRows);       
     });
 
     document.getElementById("inputFilterNameDesc").addEventListener("keyup", function(){
