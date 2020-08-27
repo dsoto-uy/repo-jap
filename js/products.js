@@ -131,13 +131,12 @@ function filterProducts(productRows)
             
         if(productRows[i].dataset.filterName.toUpperCase().includes(filterText) || productRows[i].dataset.filterDesc.toUpperCase().includes(filterText) )
         {                      
-            productRows[i].parentNode.style.display = "block";
+            productRows[i].parentNode.style.display = "block";           
         }else
         {                
-            productRows[i].parentNode.style.display = "none";
+            productRows[i].parentNode.style.display = "none";           
         }
      }
-
 }
 
 function sortAndShowProducts(sortCriteria, productsArray){
@@ -184,8 +183,6 @@ function showProductsList(array){
             </div>
             `
         }
-        document.getElementById("prod-list-container").innerHTML = htmlContentToAppend;                           
-        filterProducts(productRows);
-        
+        document.getElementById("prod-list-container").innerHTML = htmlContentToAppend;                                           
     }
 }
