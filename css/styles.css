@@ -153,3 +153,85 @@ a.custom-card:hover {
 .hide{
   display: block
 }
+
+#product{
+  margin-top: 50px;
+}
+
+#rowProductName{
+  margin-bottom: 20px;    
+}
+
+#rowProductCost h1{
+  font-weight: lighter;
+  font-size:200%;  
+  margin-top: 15px;
+}
+
+#rowBuyButton{
+  position:absolute;
+  bottom:0;
+}
+
+#buyProductButton{
+  background-color: #D23755;
+  border-color: #D23755;
+  width: 250px;
+}
+#product-comment{
+  margin-top: .5rem;
+}
+
+#product-comment .row{
+  margin-left: 15px;
+}
+
+#product-average-score{
+  font-size: 64px;
+    
+}
+
+#product-average{
+  margin-top: 20px;
+}
+
+#add-comment-text{
+  width: 500px;
+  height: 50px;
+  min-height: 50px;
+  max-height: 200px;
+}
+
+#add-comment-btn{
+  /*margin-top: 10px; */
+  background-color:#D23755 ;
+  border-color: #D23755;
+  max-height: 50px;  
+}
+
+.review-block{
+	background-color:#FAFAFA;
+	border:1px solid #EFEFEF;
+	padding:15px;
+	border-radius:3px;
+	margin-bottom:15px;
+}
+.review-block-name{
+	font-size:12px;
+	margin:10px 0;
+}
+.review-block-date{
+	font-size:12px;
+}
+.review-block-rate{
+	font-size:13px;
+	margin-bottom:15px;
+}
+.review-block-title{
+	font-size:15px;
+	font-weight:700;
+	margin-bottom:10px;
+}
+.review-block-description{
+	font-size:13px;
+}

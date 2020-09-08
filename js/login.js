@@ -44,7 +44,7 @@ function attachSignin(element) {
                     '",  "lastName":"' + googleUser.getBasicProfile().getFamilyName() +
                     '", "email":"' + googleUser.getBasicProfile().getEmail() +
                     '"}';
-      window.localStorage.clear();
+     // window.localStorage.clear();
       window.localStorage.setItem("currentUser", currentUser);
       /* document.getElementById('botonGoogle').innerText = "Sesión iniciada como: " +
            googleUser.getBasicProfile().getName();  */
@@ -65,6 +65,6 @@ function loginWithForm() {
                     '","lastName":"' + "" +
                     '", "email":"' + email +
                     '"}';
-  window.localStorage.clear();
+ // window.localStorage.clear();
   window.localStorage.setItem("currentUser", currentUser);
 }

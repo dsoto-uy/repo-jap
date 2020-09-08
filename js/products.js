@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function (e) {
             currentProductsArray = resultObj.data;             
             sortAndShowProducts(ORDER_ASC_BY_NAME, currentProductsArray);                     
         }      
-         productRows = document.getElementById("prod-list-container").getElementsByClassName("row");
+         productRows = document.getElementById("prod-list-container").getElementsByClassName("row");        
     });       
     
     document.getElementById("sortAsc").addEventListener("click", function(){
@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", function (e) {
     document.getElementById("inputFilterNameDesc").addEventListener("keyup", function(){
                         
         filterProducts(productRows);       
-    });    
+    });      
 });
 
 function sortProducts(criteria, array){
@@ -165,7 +165,7 @@ function showProductsList(array){
             
             htmlContentToAppend += `
             <div class="list-group-item list-group-item-action">
-                <div class="row" data-filter-name="`+product.name+`" data-filter-desc="`+product.description+`" >
+                <div class="row" onclick="showInfo('`+product.name+`');" data-filter-name="`+product.name+`" data-filter-desc="`+product.description+`" >
                     <div class="col-3">
                         <img src="` + product.imgSrc + `" alt="` + product.description + `" class="img-thumbnail">                    
                     </div>
@@ -178,7 +178,7 @@ function showProductsList(array){
                             <p>` + product.description +`</p>                                               
                         </div>
                         <div class= "bottomCost">
-                            <h3>` + product.cost + ` ` + product.currency + `</h3>
+                            <h3>` + product.currency + ` ` + product.cost + `</h3>
                         </div>   
                     </div>
                 </div>
@@ -187,4 +187,11 @@ function showProductsList(array){
         }
         document.getElementById("prod-list-container").innerHTML = htmlContentToAppend;                                           
     }
+}
+
+function showInfo(productName)
+{    
+    //localStorage.setItem("selectedProduct",productName);
+    window.location.replace("product-info.html");
+
 }

@@ -6,6 +6,9 @@ const PRODUCT_INFO_URL = "https://japdevdep.github.io/ecommerce-api/product/5678
 const PRODUCT_INFO_COMMENTS_URL = "https://japdevdep.github.io/ecommerce-api/product/5678-comments.json";
 const CART_INFO_URL = "https://japdevdep.github.io/ecommerce-api/cart/987.json";
 const CART_BUY_URL = "https://japdevdep.github.io/ecommerce-api/cart/buy.json";
+const MAX_RATING = 5;
+var currentUser = "";
+
 
 var showSpinner = function(){
   document.getElementById("spinner-wrapper").style.display = "block";
@@ -41,11 +44,11 @@ var getJSONData = function(url){
 }
 
 document.addEventListener("DOMContentLoaded", function(e){
-  var user = JSON.parse(localStorage.getItem("currentUser"));
+  currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
   document.getElementById("navBarOptions").innerHTML += `  
   <a class="py-2 d-none d-md-inline-block" id="profileLink" href="my-profile.html">`
-  +user.firstName+" "+user.lastName+`
+  +currentUser.firstName+" "+currentUser.lastName+`
   </a>
   `;
 });
