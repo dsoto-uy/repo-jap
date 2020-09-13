@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function (e) {
             productInfo = resultObj.data;
 
             showProductInfo(productInfo);
-            showRelatedProducts(productInfo.relatedProducts);              
+            showRelatedProducts(productInfo.relatedProducts);
         }
     });
 
@@ -23,14 +23,8 @@ document.addEventListener("DOMContentLoaded", function (e) {
 
             showComments(productComments);
             showAverageScore();
-
-            document.getElementById("add-comment-btn").addEventListener("click", function () {
-
-            });                      
         }
-    });
-
-
+    });    
 });
 
 function showProductInfo(productInfo) {
@@ -58,7 +52,7 @@ function showProductInfo(productInfo) {
 
     //Creo el carousel concatenando las imágenes creadas anteriormente.
     htmlImgCarousel += `
-    <div id="product-img-carousel" class="carousel slide" data-ride="carousel" data-interval= "2500">
+    <div id="product-img-carousel" class="carousel slide" data-ride="carousel" data-interval= "2000">
         <div class="carousel-inner">
         `
         + htmlProductImages +
@@ -80,13 +74,13 @@ function showProductInfo(productInfo) {
 
     //Armo el HTML que contiene la info del producto
     htmlProductInfo += ` 
-    <div id="rowProductSoldCount" class= "row">    
-    <p class="text-muted">Nuevo - `+ productInfo.soldCount + ` vendidos</p>
+    <div id="rowProductCategory-SoldCount" class= "row">    
+    <p class="text-muted">Categoría: `+productInfo.category+` | Nuevo - `+ productInfo.soldCount + ` vendidos</p>
     </div>
     <div id="rowProductName" class= "row">
         <h3>`+ productInfo.name + `</h3>    
     </div>
-    <div id="rowProductSoldCount" class= "row">
+    <div id="rowProductDescription" class= "row">
     <p>`+ productInfo.description + `</p>
     </div>    
     <div id="rowProductCost" class= "row">    
@@ -114,13 +108,14 @@ function showAverageScore() {
         sumScores += score;
     }
     averageScore = sumScores / scores.length;
-    starRating = getStarRating(averageScore);
+    starRating = getStarRatingHtml(averageScore);
 
-    averageScoreHtml += `<span>` + averageScore + `</span>`;
+    averageScoreHtml += `<span>` + averageScore.toFixed(1) + `</span>`;
     averageScoreText += `<p class="text-muted">Promedio entre ` + scores.length + ` comentarios</p>`;;
 
 
-    document.getElementById("product-average-score").innerHTML += averageScoreHtml;
+    document.getElementById("product-average-score").innerHTML = averageScoreHtml;
+    document.getElementById("product-average-stars").innerHTML = "";
     document.getElementById("product-average-stars").innerHTML += starRating;
     document.getElementById("product-average-stars").innerHTML += averageScoreText;
 
@@ -139,21 +134,24 @@ function showComments(commentsArray) {
 
         let comment = comments[i];
         let stars = ``;
+        let date = new Date(comment.dateTime);
+        let formattedDate = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear() + " - " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
 
-        stars = getStarRating(comment.score);
+        stars = getStarRatingHtml(comment.score);
 
         htmlComments += `
-            <div class= "row user-comment" data-user-score="`+ comment.score + `">
-            <p class="text-muted">`+ comment.user + ` - ` + comment.dateTime + ` - Puntuación: ` + stars + `</p>            
+        <hr>
+            <div class= "row user-comment" data-user-score="`+ comment.score + `" data-user-date="` + formattedDate + `">
+            <div class= "col">
+                <p class="text-muted">`+ comment.user + ` - ` + formattedDate + ` - Puntuación: ` + stars + `</p>            
+                <p class="m-0">`+ comment.description + `</p>
             </div>
-            <div class= "row">
-            <p>`+ comment.description + `</p>
-            </div>
-            <hr>
+            </div>            
+          
             `;
     }
 
-    document.getElementById("product-comment").innerHTML += htmlComments;
+    document.getElementById("latest-comments").innerHTML += htmlComments;
 }
 
 function showRelatedProducts(relatedProductsArray) {
@@ -198,20 +196,69 @@ function getUserScoreArray() {
     return scores;
 }
 
-function getStarRating(score) {
+function getStarRatingHtml(score) {
 
     let starRating = ``;
+    let roundedScore = Math.round(score);
 
-    for (let i = 1; i <= MAX_RATING; i++) {
-        if (i <= Math.round(score)) {
-            starRating += '<i class="fa fa-star checked"></i>';
-        } else {
-            starRating += '<i class="fa fa-star"></i>';
+    if (roundedScore === MAX_RATING) {
+
+        for (let i = 1; i <= roundedScore; i++) {
+            starRating += '<span class="fa fa-star static-star-max"></span>';
+        }
+    } else if (roundedScore > 1 & roundedScore < MAX_RATING) {
+        for (let i = 1; i <= roundedScore; i++) {
+            starRating += '<span class="fa fa-star static-star"></span>';
+        }
+    } else if (roundedScore === 1) {
+        for (let i = 1; i <= roundedScore; i++) {
+            starRating += '<span class="fa fa-star static-star-1"></span>';
+
         }
     }
+
+    for (let i = roundedScore + 1; i <= MAX_RATING; i++) {
+        starRating += '<span class="fa fa-star"></span>';
+    }
+
     return starRating;
 }
 
-function addComment(){
+function getUserScoreInput() {
 
+    let cantCheckedStars = 0;
+
+    for (var i = 1; i <= MAX_RATING; i++) {
+        var star = document.getElementById("user-comment-star-" + i);
+        if (star.checked) {
+            cantCheckedStars = star.value;
+        }
+    }
+    return cantCheckedStars;
+}
+
+function addComment() {
+
+    let htmlComment = ``;
+    let userName = currentUser.firstName + " " + currentUser.lastName;
+    let score = getUserScoreInput();
+    let stars = getStarRatingHtml(score);
+    let today = new Date();
+    let currentDate = today.getDate() + "/" + (today.getMonth() + 1) + "/" + today.getFullYear() + " - " + today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    let comment = document.getElementById("product-user-comment").value;
+
+
+    htmlComment += `
+    <hr>
+            <div class= "row user-comment" data-user-score="`+ score + `">
+            <div class= "col">
+                <p class="text-muted">`+ userName + ` - ` + currentDate.toString() + ` - Puntuación: ` + stars + `</p>            
+                <p class="m-0">`+ comment + `</p>
+            </div>
+            </div>            
+            
+            `;
+
+            $("#latest-comments").prepend($(htmlComment).hide().fadeIn(800));
+            showAverageScore();                       
 }

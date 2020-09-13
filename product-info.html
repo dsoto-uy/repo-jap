@@ -26,44 +26,62 @@
     </div>
   </nav>
   <main role="main" class="pb-5">
-    <div id="product" class="container">
-      <div id="product-container" class="row mb-5">
+    <!-- Info Producto -->
+    <div id="product" class="container">      
+      <div id="product-container" class="row mb-5">        
         <div id=product-img class="col"></div>
         <div id=product-info class="col"></div>
       </div>
+      <!-- Productos Relacionados -->
       <div id="related-products-container" class="container-fluid">
         <hr class="my-3">
-        <h3 id="related-products-title">Productos relacionados</h3>        
+        <h3 id="related-products-title">Productos relacionados</h3>
         <div id="related-products" class="row mt-5">
         </div>
       </div>
       <hr class="my-3">
+      <!-- Comentarios -->
       <div id="product-comment-container" class="row">
         <div id="product-comment" class="col">
           <h3 id="product-comment-title">Comentarios</h3>
-          <div id="product-average" class="row ml-0">
+          <!-- Promedio Rating -->
+          <div id="product-average" class="row ml-0 mb-3">
             <div id="product-average-score" class="col-sm-auto">
             </div>
             <div id="product-average-stars" class="col-sm-auto p-4 mt-2">
             </div>
           </div>
-          <div id="add-comment" class="row ml-0 mt-3 mb-5 p-0">
-            <div class="col-sm-auto m-0 p-0">
-              <form>
-                <div class="row m-0 p-0">            
-                  <textarea id="add-comment-text" placeholder="Haz un comentario sobre el producto"></textarea>
-                  <button id="add-comment-btn" type="button" class="btn btn-primary ml-3"><i class="fa fa-comment"></i>
-                    Comentar</button>
+          <!-- Rating de Usuario -->
+          <h5>¿Cuantas estrellas le darías?</h5>
+          <div class="cont">
+            <div class="stars">
+              <form action="#">
+                <input class="star star-max" id="user-comment-star-5" type="radio" name="star" value="5" />
+                <label class="fa fa-star star-max" for="user-comment-star-5"></label>
+                <input class="star star-4" id="user-comment-star-4" type="radio" name="star" value="4" />
+                <label class="fa fa-star star-4" for="user-comment-star-4"></label>
+                <input class="star star-3" id="user-comment-star-3" type="radio" name="star" value="3" />
+                <label class="fa fa-star star-3" for="user-comment-star-3"></label>
+                <input class="star star-2" id="user-comment-star-2" type="radio" name="star" value="2" />
+                <label class="fa fa-star star-2" for="user-comment-star-2"></label>
+                <input class="star star-1" id="user-comment-star-1" type="radio" name="star" value="1" />
+                <label class="fa fa-star star-1" for="user-comment-star-1"></label>
+                <div class="rev-box">
+                  <textarea id="product-user-comment" class="review" col="30" name="review"></textarea>
+                  <button id="add-comment-btn" type="button" class="btn btn-primary" onclick="addComment();"><i
+                      class="fa fa-comment"></i> Comentar</button>
                 </div>
               </form>
             </div>
           </div>
-          <div class="row ml-0">
-            <h5 id="product-comment-title">Últimos comentarios</h5>
+          <!-- Ultimos comentarios -->
+          <h5 id="product-comment-title">Últimos comentarios</h5>
+          <div id="latest-comments" class="col mt-3">
           </div>
           <hr class="my-3">
         </div>
       </div>
+    </div>
     </div>
     <footer class="text-muted">
       <div class="container">

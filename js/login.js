@@ -1,8 +1,10 @@
 //Función que se ejecuta una vez que se haya lanzado el evento de
 //que el documento se encuentra cargado, es decir, se encuentran todos los
 //elementos HTML presentes.
-const CLIENT_ID = "880069710415-2f4rpegucor1qqghmgke263m6h8g3k39.apps.googleusercontent.com";
-//const CLIENT_ID = "880069710415-9m83rj0jleuh55bsfct1gart0c9ta3d0.apps.googleusercontent.com";
+//CLIENT_ID_TESTING
+//const CLIENT_ID = "880069710415-2f4rpegucor1qqghmgke263m6h8g3k39.apps.googleusercontent.com";
+//CLIENT_ID PROD
+const CLIENT_ID = "880069710415-9m83rj0jleuh55bsfct1gart0c9ta3d0.apps.googleusercontent.com";
 
 var currentUser;
 var googleUser = {};
