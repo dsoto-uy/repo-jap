@@ -6,8 +6,6 @@ var productInfo = [];
 
 document.addEventListener("DOMContentLoaded", function (e) {
 
-    // selectedProduct = localStorage.getItem("selectedProduct");    
-
     getJSONData(PRODUCT_INFO_URL).then(function (resultObj) {
         if (resultObj.status === "ok") {
             productInfo = resultObj.data;
@@ -23,10 +21,12 @@ document.addEventListener("DOMContentLoaded", function (e) {
 
             showComments(productComments);
             showAverageScore();
+            addStarUserRating();
         }
-    });    
+    });
 });
 
+//Funcion que agrega la información del producto.
 function showProductInfo(productInfo) {
 
     let htmlImgCarousel = "";
@@ -34,7 +34,7 @@ function showProductInfo(productInfo) {
 
     let htmlProductInfo = "";
 
-    //Recorro el array de imágenes y creo un DIV para cada elemento, poniendo el primero en ACTIVE para el carousel.
+    //ENTREGA 4: Recorro el array de imágenes y creo un DIV para cada elemento, poniendo el primero en ACTIVE para el carousel.
     for (let i = 0; i < productInfo.images.length; i++) {
 
         if (i == 0) {
@@ -50,7 +50,7 @@ function showProductInfo(productInfo) {
         }
     }
 
-    //Creo el carousel concatenando las imágenes creadas anteriormente.
+    //ENTREGA 4: Creo el carousel concatenando el HTML de las imágenes creado anteriormente.
     htmlImgCarousel += `
     <div id="product-img-carousel" class="carousel slide" data-ride="carousel" data-interval= "2000">
         <div class="carousel-inner">
@@ -68,14 +68,14 @@ function showProductInfo(productInfo) {
         </a>
     </div>`
 
-    //Agrego el carousel a la página y lo inicio.
+    //ENTREGA 4: Agrego el carousel a la página y lo inicio.
     document.getElementById("product-img").innerHTML = htmlImgCarousel;
     $('#product-img-carousel').carousel();
 
     //Armo el HTML que contiene la info del producto
     htmlProductInfo += ` 
     <div id="rowProductCategory-SoldCount" class= "row">    
-    <p class="text-muted">Categoría: `+productInfo.category+` | Nuevo - `+ productInfo.soldCount + ` vendidos</p>
+    <p class="text-muted">Categoría: `+ productInfo.category + ` | Nuevo - ` + productInfo.soldCount + ` vendidos</p>
     </div>
     <div id="rowProductName" class= "row">
         <h3>`+ productInfo.name + `</h3>    
@@ -154,17 +154,23 @@ function showComments(commentsArray) {
     document.getElementById("latest-comments").innerHTML += htmlComments;
 }
 
-function showRelatedProducts(relatedProductsArray) {
-    getJSONData(PRODUCTS_URL).then(function (resultObj) {
+//ENTREGA 4: Función para mostrar los productos relacionados
+function showRelatedProducts(relatedProductsArray) {  /*La función va a recibir el array conteniendo las posiciones que ocupan los productos relacionados 
+                                                        dentro del array principal.*/
+
+    getJSONData(PRODUCTS_URL).then(function (resultObj) { //Obtengo el listado completo de productos.
         if (resultObj.status === "ok") {
             productList = resultObj.data;
 
             let htmlRelatedProducts = "";
 
-            for (let i = 0; i < relatedProductsArray.length; i++) {
-                let relatedProductPosition = relatedProductsArray[i];
-                let relatedProduct = productList[relatedProductPosition];
+            for (let i = 0; i < relatedProductsArray.length; i++) { //Recorro los items del array de productos relacionados y por cada item se hace lo siguiente:
 
+                let relatedProductPosition = relatedProductsArray[i]; //Obtengo el valor del item del array de productos seleccionados
+                let relatedProduct = productList[relatedProductPosition]; /*Uso la posición del producto relacionado guardada en la variable relatedProductPosition
+                                                                         para obtener el objeto producto relacionado y toda su información.*/
+
+                //Creo el HTML del producto relacionado completandolo con sus atributos
                 htmlRelatedProducts += `
                 <div class= "col-lg-3 col-md-4 col-6 border-0">
                     <div id="related-product-img" class= "row">
@@ -179,9 +185,46 @@ function showRelatedProducts(relatedProductsArray) {
                     </div>                     
                 </div>`
             }
-            document.getElementById("related-products").innerHTML = htmlRelatedProducts;
+            document.getElementById("related-products").innerHTML = htmlRelatedProducts; //Agrego el HTML con todos los productos relacionados a su contenedor en el archivo product-info.html.
         }
     })
+}
+
+
+function addStarUserRating() {
+
+    if (currentUser != null) {
+        htmlUserStarRating = `
+        <h5 class="text-left mb-4">¿Cuantas estrellas le darías?</h5>
+                    <div class="stars">
+                        <form action="#">
+                            <input class="star star-max" id="user-comment-star-5" type="radio" name="star" value="5" />
+                            <label class="fa fa-star star-max" for="user-comment-star-5"></label>
+                            <input class="star star-4" id="user-comment-star-4" type="radio" name="star" value="4" />
+                            <label class="fa fa-star star-4" for="user-comment-star-4"></label>
+                            <input class="star star-3" id="user-comment-star-3" type="radio" name="star" value="3" />
+                            <label class="fa fa-star star-3" for="user-comment-star-3"></label>
+                            <input class="star star-2" id="user-comment-star-2" type="radio" name="star" value="2" />
+                            <label class="fa fa-star star-2" for="user-comment-star-2"></label>
+                            <input class="star star-1" id="user-comment-star-1" type="radio" name="star" value="1" />
+                            <label class="fa fa-star star-1" for="user-comment-star-1"></label>
+                            <div class="rev-box">
+                            <textarea id="product-user-comment" class="review" col="30" name="review"></textarea>
+                            <button id="add-comment-btn" type="button" class="btn btn-primary" onclick="addComment();"><i
+                                class="fa fa-comment"></i> Comentar</button>
+                            </div>
+                        </form>
+                    </div>
+            `
+    } else {
+
+        htmlUserStarRating = `
+                    <div class="border border-danger rounded m-3">
+                        <p class="m-3">Para comentar debes <a href="index.html" class="text-info">Iniciar Sesión</a></p>
+                    </div>
+            `
+    }
+    document.getElementById("comment-container").innerHTML = htmlUserStarRating;
 }
 
 function getUserScoreArray() {
@@ -259,6 +302,6 @@ function addComment() {
             
             `;
 
-            $("#latest-comments").prepend($(htmlComment).hide().fadeIn(800));
-            showAverageScore();                       
+    $("#latest-comments").prepend($(htmlComment).hide().fadeIn(800));
+    showAverageScore();
 }

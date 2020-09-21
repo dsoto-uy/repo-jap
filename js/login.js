@@ -10,13 +10,13 @@ var currentUser;
 var googleUser = {};
 
 document.addEventListener("DOMContentLoaded", function (e) {
+  localStorage.setItem("lastUrl","home.html");  
   showGoogleButton();
   startApp();
 
-  document.getElementById("btnLogIn").addEventListener("click", function () {
+  document.getElementById("btnLogIn").addEventListener("click", function () {   
     loginWithForm();
-  });
-
+  });  
 });
 
 function showGoogleButton() {
@@ -67,6 +67,6 @@ function loginWithForm() {
                     '","lastName":"' + "" +
                     '", "email":"' + email +
                     '"}';
- // window.localStorage.clear();
+   
   window.localStorage.setItem("currentUser", currentUser);
 }

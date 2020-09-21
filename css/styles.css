@@ -213,11 +213,15 @@ span.static-star-1{
   max-width: 350px;
   text-align: center; 
   padding: 10px;
-  color: #EEE;
- /* border-radius: 5px;
+ /* color: #EEE;
+  border-radius: 5px;
   border-color: black;
   border: thin solid #444;*/
   overflow: hidden;
+}
+
+a.text-info,a.text-info:focus,a.text-info:hover{
+  color: #D23755 !important;
 }
 
 div.stars{
@@ -301,4 +305,66 @@ input.star:checked ~ .rev-box{
 
 #latest-comments .user-comment{
   margin-left: 15px;
+}
+
+/*USUARIO*/
+
+#currentUserDropdown{
+  color: white;
+}
+
+.dropdown-menu{
+  padding: 0;
+}
+
+.dropdown-item:hover,.dropdown-item:hover:focus{
+  background-color:#D23755;
+  color: white !important;
+  outline: none;
+}
+.dropdown-item{
+  padding: 13px;  
+}
+
+#currentUserDropdownBtn.dropdown-toggle:focus{
+  outline: none !important;
+  box-shadow: none;
+}
+
+#currentUserDropdownBtn.dropdown-toggle:hover{
+  background-color:#ff6987;
+  transition: 0.3s;
+}
+
+#currentUserDropdownBtn.dropdown-toggle{
+  background-color:#D23755;
+  color: white;
+  border-color: #D23755; 
+  opacity: 1;
+}
+
+  .animate {
+    animation-duration: 0.3s;
+    -webkit-animation-duration: 0.3s;
+    animation-fill-mode: both;
+    -webkit-animation-fill-mode: both;
+  }
+
+@keyframes slideIn {
+  from {top: 8rem;
+  opacity: 0}  
+  to {top: 0.1rem;
+  opacity: 1;}
+}
+
+@-webkit-keyframes slideIn {
+  from {top: 8rem;
+    opacity: 0}  
+    to {top: 0.1rem;
+    opacity: 1;}
+  }
+
+.slideIn {
+  -webkit-animation-name: slideIn;
+  animation-name: slideIn;
 }

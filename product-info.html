@@ -22,13 +22,13 @@
       <a class="py-2 d-none d-md-inline-block" href="categories.html">Categorías</a>
       <a class="py-2 d-none d-md-inline-block" href="products.html">Productos</a>
       <a class="py-2 d-none d-md-inline-block" href="sell.html">Vender</a>
-      <a class="py-2 d-none d-md-inline-block" href="cart.html">Mi carrito</a>
+      <!-- <a class="py-2 d-none d-md-inline-block" href="cart.html">Mi carrito</a> -->
     </div>
   </nav>
   <main role="main" class="pb-5">
     <!-- Info Producto -->
-    <div id="product" class="container">      
-      <div id="product-container" class="row mb-5">        
+    <div id="product" class="container">
+      <div id="product-container" class="row mb-5">
         <div id=product-img class="col"></div>
         <div id=product-info class="col"></div>
       </div>
@@ -52,30 +52,12 @@
             </div>
           </div>
           <!-- Rating de Usuario -->
-          <h5>¿Cuantas estrellas le darías?</h5>
-          <div class="cont">
-            <div class="stars">
-              <form action="#">
-                <input class="star star-max" id="user-comment-star-5" type="radio" name="star" value="5" />
-                <label class="fa fa-star star-max" for="user-comment-star-5"></label>
-                <input class="star star-4" id="user-comment-star-4" type="radio" name="star" value="4" />
-                <label class="fa fa-star star-4" for="user-comment-star-4"></label>
-                <input class="star star-3" id="user-comment-star-3" type="radio" name="star" value="3" />
-                <label class="fa fa-star star-3" for="user-comment-star-3"></label>
-                <input class="star star-2" id="user-comment-star-2" type="radio" name="star" value="2" />
-                <label class="fa fa-star star-2" for="user-comment-star-2"></label>
-                <input class="star star-1" id="user-comment-star-1" type="radio" name="star" value="1" />
-                <label class="fa fa-star star-1" for="user-comment-star-1"></label>
-                <div class="rev-box">
-                  <textarea id="product-user-comment" class="review" col="30" name="review"></textarea>
-                  <button id="add-comment-btn" type="button" class="btn btn-primary" onclick="addComment();"><i
-                      class="fa fa-comment"></i> Comentar</button>
-                </div>
-              </form>
-            </div>
+          
+          <div id="comment-container" class="cont">
+            
           </div>
           <!-- Ultimos comentarios -->
-          <h5 id="product-comment-title">Últimos comentarios</h5>
+          <h5 id="product-comment-title" class="mt-3">Últimos comentarios</h5>
           <div id="latest-comments" class="col mt-3">
           </div>
           <hr class="my-3">
