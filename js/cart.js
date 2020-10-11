@@ -30,7 +30,7 @@ function showCartCurrencySelector(currencyArray) {
 
     // inicializo el html de la estructura del dropdown y le concateno el html de las opciones.
     //se pone como descripción inicial la descripción de la moneda default.
-   let htmlCurrencyDropdown = `
+    let htmlCurrencyDropdown = `
     <div class="dropdown">
         <button class="btn btn-secondary btn-sm dropdown-toggle text-right selectorMoneda " type="button" id="dropdownCurrencyButton" data-toggle="dropdown"
           aria-haspopup="true" aria-expanded="false">`+ DEFAULT_CURRENCY.description +
@@ -40,7 +40,7 @@ function showCartCurrencySelector(currencyArray) {
         `</div>
     </div>
     <div class=" mr-3 pt-1 text-center">
-        Mostrar moneda en:
+        Ver moneda en:
     </div>
     `;
     document.getElementById("cart-currency").innerHTML = htmlCurrencyDropdown;//se agrega el elemento a la página
@@ -48,7 +48,7 @@ function showCartCurrencySelector(currencyArray) {
 
 //muestra los productos y los totales a partir de un array de productos
 function showCartProductsAndTotalCost(array) {
-    
+
     let htmlProduct = ``; //defino la variable que va a contener el html de productos
     let posProd = 0; //defino un contador para ayudar a identificar los productos.
 
@@ -74,7 +74,7 @@ function showCartProductsAndTotalCost(array) {
     });
 
     document.getElementById("cart-products").innerHTML = htmlProduct; //agregan los productos a la página
-    
+
     actualizarImportes(selectedShipping.shippingPercentage);// Actualizo los totales de acuerdo al default shipping
 
     var element = document.getElementsByName("prod-cant"); //Obtengo todos los input de cantidad de producto (el nombre es el mismo en todos) para agregar los listeners.
@@ -82,7 +82,7 @@ function showCartProductsAndTotalCost(array) {
     //recorro los input y agrego el listener por cada uno
     element.forEach(element => {
         element.addEventListener('change', function () {
-            
+
             let selectedPercentage; //inicalizo una variable para guardar el porcentaje seleccionado
             let htmlShippingOptions = document.getElementsByName("radio-shipping-option"); // obtengo todos los radio button del tipo de envío
 
@@ -103,7 +103,7 @@ function showCartProductsAndTotalCost(array) {
 function showShippingOptions(shippingOptionsArray) {
 
     //inicializo la variable que va a contener el html de los tipos de envío
-   let htmlOptions = ``;
+    let htmlOptions = ``;
 
     //recorro el array de opciones 
     shippingOptionsArray.forEach(shippingOption => {
@@ -125,7 +125,7 @@ function showShippingOptions(shippingOptionsArray) {
         }
     });
 
-    let htmlShippingOptions = `<h4 class="mb-3" > Tipo de Envío</h4 >`+ htmlOptions; //agrego un título a los tipos de envío y le concateno las opciones
+    let htmlShippingOptions = `<h4 class="mb-3" > Tipo de Envío</h4 >` + htmlOptions; //agrego un título a los tipos de envío y le concateno las opciones
 
     document.getElementById("shipping-options").innerHTML = htmlShippingOptions; //agrego el html a la página
 }
@@ -137,10 +137,10 @@ function setCurrency(moneda, texto) {
     document.getElementById("dropdownCurrencyButton").innerText = texto; // cambio el texto del botòn principal del dropdown por la descripción de la moneda seleccionada.
     let selectedPercentage; //defino una variable que va a guardar el porcentaje seleccionado.
     htmlShippingOptions = document.getElementsByName("radio-shipping-option"); //obtengo mediante el nombre, la colección de los radiobutton de los tipos de envío.
-    
+
     // recorro los elementos radiobutton 
     htmlShippingOptions.forEach(option => {
-        if (option.checked) { 
+        if (option.checked) {
             selectedPercentage = option.value; //si el radiobutton está seleccionado, guardo el porcentaje en la variable selectedPercentage.
         }
     });
@@ -157,7 +157,7 @@ function setCurrencyFormat(importe) {
     });
     return currencyFormatter.format(importe); //devuelve el importe formateado de acuerdo a la moneda.
 }
-    
+
 //actualiza los importes en la página, toma como parámetro el costo de envío.
 function actualizarImportes(porcentajeCostoEnvio) {
     let total = 0; //inicializo el total del carrito en 0
@@ -176,7 +176,7 @@ function actualizarImportes(porcentajeCostoEnvio) {
 
         elementUnitCost.innerHTML = setCurrencyFormat(nuevoUnitCost);//le doy formato al costo unitario de acuerdo a la moneda seleccionada.
         elementSubtotal.innerHTML = `<strong> ` + setCurrencyFormat(nuevoSubtotal) + `</strong>`; //le doy formato al subtotal del producto de acuerdo a la moneda seleccionada.
-       
+
 
         total += nuevoSubtotal; //sumo el subtotal del producto al gran total del carrito
     });
@@ -189,20 +189,22 @@ function actualizarImportes(porcentajeCostoEnvio) {
 }
 
 //recibe un id de moneda y el importe en dicha moneda. Devuelve el importe convertido a la moneda seleccionada.
-    function convertirMoneda(moneda, importe) {
-        switch (moneda) {
-            case selectedCurrency: 
-                return importe; //si la moneda es igual a la moneda seleccionada por el usuario, no se realiza conversión y devuelve el mismo importe.
-                break;
-            case PESO_UY:
-                return importe / CAMBIO_DOLAR_UYU; //si es en pesos, lo convierte a dolares usando el tipo de cambio.
-            case DOLAR:
-                return importe * CAMBIO_DOLAR_UYU; //si es en dolares, lo convierte a pesos usando el tipo de cambio.
-                break;
-        }
+function convertirMoneda(moneda, importe) {
+    switch (moneda) {
+        case selectedCurrency:
+            return importe; //si la moneda es igual a la moneda seleccionada por el usuario, no se realiza conversión y devuelve el mismo importe.
+            break;
+        case PESO_UY:
+            return importe / CAMBIO_DOLAR_UYU; //si es en pesos, lo convierte a dolares usando el tipo de cambio.
+        case DOLAR:
+            return importe * CAMBIO_DOLAR_UYU; //si es en dolares, lo convierte a pesos usando el tipo de cambio.
+            break;
     }
+}
 
-    document.addEventListener("DOMContentLoaded", function (e) {
+document.addEventListener("DOMContentLoaded", function (e) {
+
+    if (currentUser != null) { //si está logueado carga el carrito
         fetch(VIDEOGAMES_URL)                   //
             .then(response => response.json())  //obtengo la lista de videojuegos
             .then(result => {                   //
@@ -211,7 +213,10 @@ function actualizarImportes(porcentajeCostoEnvio) {
                 showCartCurrencySelector(CURRENCY_LIST); //muestro el selector de monedas.
             })
             .catch(err => console.log(err));
-
-
-
-    });
+    } else { //si no está logueado muestra un mensaje indicando que se inicie sesión
+        document.getElementById("cart-container").innerHTML = `
+            <div class="border border-danger rounded m-3 text-center">
+                <p class="m-3">Para ver tu carrito debes <a href="index.html" class="text-info">Iniciar Sesión</a></p>
+            </div>`;
+    }
+});
