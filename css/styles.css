@@ -368,3 +368,26 @@ input.star:checked ~ .rev-box{
   -webkit-animation-name: slideIn;
   animation-name: slideIn;
 }
+
+/*CARRITO*/
+
+.img-thumbnail{  
+  max-width:80%;
+  height:auto;
+}
+
+.prodCant{
+width: 40%;
+}
+
+.currency-dropdown-item:hover, .currency-dropdown-item:hover:focus{
+  background-color: #6c757d;
+  color: white !important;
+  outline: none
+
+}
+
+.table thead th {
+  vertical-align: bottom;
+  border-bottom: none !important;
+}
