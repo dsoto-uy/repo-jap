@@ -73,13 +73,13 @@ footer p {
   background: white;
 }
 
-.alert{
+/*.alert{
   position: fixed;
   top:80px;
   width: 50%;
   left: 50%;
   transform: translate(-50%, 0);
-}
+}*/
 .lds-ring {
   display: inline-block;
   position: relative;
@@ -391,3 +391,61 @@ width: 40%;
   vertical-align: bottom;
   border-bottom: none !important;
 }
+
+.rounded {
+  border-radius: 1rem
+}
+
+.nav-pills .nav-link {
+  color: #555
+}
+
+.nav-pills .nav-link.active {
+  background-color:#D23755 ;
+  color: white;
+}
+
+.error{
+  border-color: red;
+}
+
+.errorMessage{
+  color: red;
+  font-size: small;
+}
+
+#btnCerrar:focus{
+  outline: none;
+}
+
+.btnDefault, .btnDefault:active, .btnDefault:hover,.btnDefault:focus{
+  background-color:#D23755 !important;
+  border-color: #D23755 !important; 
+  color: white !important;
+}
+
+#btnPagar{
+  width: 100px;
+  height: 50px;
+}
+
+/*COLORES PARA TARJETAS DE CREDITO (fontAwesome)*/
+
+  .fa-cc-amex {
+    color: #007bc1;
+  }
+  .fa-cc-diners-club {
+    color:  #004A97;
+  }
+  .fa-cc-discover {
+    color:  #f68121;
+  }
+  .fa-cc-jcb {
+    color: #003A8F;
+  }
+  .fa-cc-mastercard {
+    color: #0a3a82;
+  }
+  .fa-cc-visa {
+    color: #0157a2;
+  }

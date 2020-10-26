@@ -5,11 +5,15 @@ const CAMBIO_DOLAR_UYU = 40; //valor de 1 dolar en pesos, se usa para las conver
 const CURRENCY_LIST = [{ id: "USD", description: "Dólar (U$S)" }, { id: "UYU", description: "Peso Uruguayo ($)" }]; // lista de monedas disponibles
 //lista de opciones de envío disponibles
 const SHIPPING_OPTIONS = [{ id: "STANDARD", description: "Standard 12 a 15 dias", shippingPercentage: 5 }, { id: "EXPRESS", description: "Express 5 a 8 días", shippingPercentage: 7 }, { id: "PREMIUM", description: "Premium 2 a 5 días", shippingPercentage: 15 }];
+const BANK_LIST = [{ id: "BROU", description: "BROU" }, { id: "SANT", description: "Santander" }, { id: "ITAU", description: "Itaú" }];
 const DEFAULT_CURRENCY = CURRENCY_LIST[0]; //moneda predeterminada, se inicializa con la primer opción disponible
 const DEFAULT_SHIPPING = SHIPPING_OPTIONS[0];
 
+var successfulBuyMessage = "";
 var selectedCurrency = DEFAULT_CURRENCY.id; // última moneda seleccionada, se inicializa con el valor de la moneda predeterminada.
 var selectedShipping = DEFAULT_SHIPPING; //último metodo de envìo seleccionado, se inicializa con la primer opción disponible.
+var currentCard = "";
+var transferenciaBancaria = false;
 
 //función para mostrar el dropdown de selección de monedas, toma como parámetro un array conteniendo las monedas.
 function showCartCurrencySelector(currencyArray) {
@@ -66,9 +70,11 @@ function showCartProductsAndTotalCost(array) {
                             <td scope="col" class="col">`+ product.name + `</td>
                             <td scope="col" class="col" id="prod-` + posProd + `-unitcost">` + unitCost + `</td>
                             <td scope="col" class="col">
-                            <input class="form-control prodCant" data-posProd="`+ posProd + `" name="prod-cant" type="number" min="1" placeholder="Cant." value ="` + product.count + `" ></input>                        
+                            <input class="form-control prodCant" data-posProd="`+ posProd + `" id="prod-` + posProd + `-cant" name="prod-cant" type="number" min="1" placeholder="Cant." value ="` + product.count + `" ></input>                        
+                            <span class="errorMessage" id="prod-` + posProd + `-cant-error"></span>
                             </td>
                             <td scope="col" class="col" data-currency="`+ product.currency + `" data-unitCost="` + product.unitCost + `" id="prod-` + posProd + `-subtotal"><strong>` + subtotalProducto + `</strong></td>
+                            <td scope="col" class="col"><button class="btn btn-sm btn-danger float-right" id="btnRemoveProd`+ posProd + `" name="btnRemoveProd"><i class="fa fa-trash-alt"></i> </button> </td>
                         </tr>`
         posProd++; //aumento el contador en cada iteración.
     });
@@ -77,10 +83,10 @@ function showCartProductsAndTotalCost(array) {
 
     actualizarImportes(selectedShipping.shippingPercentage);// Actualizo los totales de acuerdo al default shipping
 
-    var element = document.getElementsByName("prod-cant"); //Obtengo todos los input de cantidad de producto (el nombre es el mismo en todos) para agregar los listeners.
-
+    var arrayElementsCant = document.getElementsByName("prod-cant"); //Obtengo todos los input de cantidad de producto (el nombre es el mismo en todos) para agregar los listeners.
+    var arrayDeleteButtons = document.getElementsByName("btnRemoveProd");
     //recorro los input y agrego el listener por cada uno
-    element.forEach(element => {
+    arrayElementsCant.forEach(element => {
         element.addEventListener('change', function () {
 
             let selectedPercentage; //inicalizo una variable para guardar el porcentaje seleccionado
@@ -96,7 +102,11 @@ function showCartProductsAndTotalCost(array) {
         });
     });
 
-
+    arrayDeleteButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            deleteProduct(button);
+        });
+    });
 }
 
 //muestra las opciones de envío, toma como parámetro el array de opciones de envío SHIPPING_OPTIONS
@@ -202,7 +212,279 @@ function convertirMoneda(moneda, importe) {
     }
 }
 
+function savePaymentInfo(idFormulario) {
+
+    let camposCompletos = true;
+    let elementosParaValidar = document.getElementById(idFormulario).querySelectorAll("input,select");
+
+    for (elemento of elementosParaValidar) {
+
+        switch (elemento.id) {
+
+            case "titularTarjeta":
+                if (elemento.value.trim() == "") {
+                    elemento.classList.add("error");
+                    document.getElementById(elemento.id + "-error").textContent = "Este campo no puede quedar vacío";
+                } else {
+                    elemento.classList.remove("error");
+                    document.getElementById(elemento.id + "-error").textContent = "";
+                }
+                break;
+            case "numeroTarjeta":
+                if (elemento.value.trim() == "") {
+                    camposCompletos = false;
+                    elemento.classList.add("error");
+                    document.getElementById(elemento.id + "-error").textContent = "Este campo no puede quedar vacío";
+
+                } else if (!payform.validateCardNumber(elemento.value)) {
+                    camposCompletos = false;
+                    elemento.classList.add("error");
+                    document.getElementById(elemento.id + "-error").textContent = "Número de tarjeta inválido";
+                } else {
+                    elemento.classList.remove("error");
+                    document.getElementById(elemento.id + "-error").textContent = "";
+                }
+                break;
+            case "mes":
+                break;
+            case "año":
+                break;
+            case "cvv":
+                if (elemento.value.trim() == "") {
+                    camposCompletos = false;
+                    elemento.classList.add("error");
+                    document.getElementById(elemento.id + "-error").textContent = "Este campo no puede quedar vacío";
+
+                } else if (!payform.validateCardCVC(elemento.value, currentCard)) {
+                    camposCompletos = false;
+                    elemento.classList.add("error");
+                    document.getElementById(elemento.id + "-error").textContent = "CVV inválido";
+                } else {
+                    elemento.classList.remove("error");
+                    document.getElementById(elemento.id + "-error").textContent = "";
+                }
+                break;
+            case "listaBancos":
+                if (elemento.value == "") {
+                    camposCompletos = false;
+                    document.getElementById(elemento.id + "-error").textContent = "Debes seleccionar un Banco";
+                } else {
+                    document.getElementById(elemento.id + "-error").textContent = "";
+                }
+                break;
+        }
+    }
+
+    if (camposCompletos) {
+        $('#modalFormaPago').modal('hide');
+        if (transferenciaBancaria) {
+            let bancoSeleccionado = document.getElementById("listaBancos").value;
+            document.getElementById("formaPagoSeleccionada").innerHTML = "Transferencia bancaria - " + bancoSeleccionado;
+        } else {
+            let numeroTarjeta = document.getElementById("numeroTarjeta").value;
+            document.getElementById("formaPagoSeleccionada").innerHTML = currentCard.toUpperCase() + " " + getCardHtmlIcon(currentCard) + " - " + "termina en " + numeroTarjeta.slice(-4);
+        }
+        document.getElementById("btnFormaPago").textContent = "Cambiar";
+        document.getElementById(idFormulario).reset();
+    }
+}
+
+function validFields() {
+
+    let camposCompletos = true;
+
+    var elementosParaValidar = new Set([
+        ...document.getElementById("formDireccionEnvio").querySelectorAll("input"),
+        ...document.getElementById("cart-products").querySelectorAll("input")
+    ]);
+
+    for (elemento of elementosParaValidar) {
+
+        switch (elemento.id) {
+
+            case "calle":
+                if (elemento.value.trim() == "") {
+                    camposCompletos = false;
+                    elemento.classList.add("error");
+                    document.getElementById(elemento.id + "-error").textContent = "Ingresa una calle";
+                } else {
+                    elemento.classList.remove("error");
+                    document.getElementById(elemento.id + "-error").textContent = "";
+                }
+                break;
+            case "numeroPuerta":
+                if (elemento.value.trim() == "") {
+                    camposCompletos = false;
+                    elemento.classList.add("error");
+                    document.getElementById(elemento.id + "-error").textContent = "Ingresa un número de puerta";
+                } else {
+                    elemento.classList.remove("error");
+                    document.getElementById(elemento.id + "-error").textContent = "";
+                }
+                break;
+            case "esquina":
+                if (elemento.value.trim() == "") {
+                    camposCompletos = false;
+                    elemento.classList.add("error");
+                    document.getElementById(elemento.id + "-error").textContent = "Ingresa una esquina";
+                } else {
+                    elemento.classList.remove("error");
+                    document.getElementById(elemento.id + "-error").textContent = "";
+                }
+                break;
+            case (/prod-.*-cant/.test(elemento.id) ? elemento.id : ""):
+                if (elemento.value.trim() == "") {
+                    camposCompletos = false;
+                    elemento.classList.add("error");
+                    document.getElementById(elemento.id + "-error").textContent = "Ingresa la cantidad";
+                } else if (elemento.value == 0) {
+                    camposCompletos = false;
+                    elemento.classList.add("error");
+                    document.getElementById(elemento.id + "-error").textContent = "La cantidad tiene que ser mayor a cero";
+                } else {
+                    elemento.classList.remove("error");
+                    document.getElementById(elemento.id + "-error").textContent = "";
+                }
+                break;
+        }
+    }
+    return camposCompletos;
+}
+
+function getCardHtmlIcon(cardName) {
+    let htmlIcon = `<i class="far fa-credit-card"></i>`;
+
+    switch (cardName) {
+        case "visa":
+            htmlIcon = `<i class="fab fa-cc-visa mx-1"></i>`;
+            break;
+        case "mastercard":
+            htmlIcon = `<i class="fab fa-cc-mastercard mx-1"></i>`;
+            break;
+        case "amex":
+            htmlIcon = `<i class="fab fa-cc-amex mx-1"></i>`;
+            break;
+        case "jcb":
+            htmlIcon = `<i class="fab fa-cc-jcb mx-1"></i>`;
+            break;
+        case "dinersclub":
+            htmlIcon = `<i class="fab fa-cc-diners-club mx-1"></i>`;
+            break;
+        case "discover":
+            htmlIcon = `<i class="fa fa-cc-discover"></i> mx-1`;
+            break;
+    }
+    return htmlIcon;
+}
+
+function addExpirationYears() {
+    let today = new Date();
+    let htmlYearOptions = "";
+
+    for (i = 0; i <= 10; i++) {
+        let year = today.getFullYear() + i;
+
+        htmlYearOptions += `<option value="` + year + `">` + year + `</option>`;
+
+    }
+    document.getElementById("año").innerHTML = htmlYearOptions;
+}
+
+function addBankOptions() {
+
+    let htmlBankList = `<option value="" selected disabled>--Selecciona un Banco--</option>`;
+
+    BANK_LIST.forEach(bank => {
+        htmlBankList += `<option>` + bank.description + `</option>`;
+    });
+
+    document.getElementById("listaBancos").innerHTML = htmlBankList;
+}
+
+function deleteProduct(removeButton) {
+    var productRow = $(removeButton).parent().parent();
+    productRow.slideUp(300, function () {
+        productRow.remove();
+
+        htmlShippingOptions = document.getElementsByName("radio-shipping-option"); //obtengo mediante el nombre, la colección de los radiobutton de los tipos de envío.
+
+        // recorro los elementos radiobutton 
+        htmlShippingOptions.forEach(option => {
+            if (option.checked) {
+                selectedPercentage = option.value; //si el radiobutton está seleccionado, guardo el porcentaje en la variable selectedPercentage.
+            }
+        });
+        actualizarImportes(selectedPercentage); //actualizo los importes de acuerdo al porcentaje de envío.
+    });
+}
+
+function showSuccessfullBuyMessage() {
+    let htmlMessage = ``;
+
+    htmlMessage = `
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Felicitaciones! </strong>`+ successfulBuyMessage + `.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">×</span>
+        </button>
+    </div>`;
+
+    document.getElementById("message-area").innerHTML = htmlMessage;
+}
+
+function showBuyErrorMessage(errorMessage) {
+    let htmlMessage = ``;
+
+    htmlMessage = `
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Upss!</strong> `+ errorMessage + `.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">×</span>
+        </button>
+    </div>`;
+
+    document.getElementById("message-area").innerHTML = htmlMessage;
+}
+
 document.addEventListener("DOMContentLoaded", function (e) {
+
+    payform.cardNumberInput(document.getElementById("numeroTarjeta"));
+    payform.cvcInput(document.getElementById("cvv"));
+    addExpirationYears();
+    addBankOptions();
+
+    document.getElementById("btnGuardarBanco").addEventListener('click', function () {
+        transferenciaBancaria = true;
+        currentCard = "";
+        savePaymentInfo("formBanco");
+    });
+
+    document.getElementById("btnGuardarTarjetaCredito").addEventListener('click', function () {
+        transferenciaBancaria = false;
+        savePaymentInfo("formTarjetaCredito");
+    });
+
+    document.getElementById("numeroTarjeta").addEventListener('keyup', function () {
+        if (payform.validateCardNumber(this.value.trim())) {
+            currentCard = payform.parseCardType(this.value.trim());
+            document.getElementById("cardIcon").innerHTML = getCardHtmlIcon(currentCard);
+        } else {
+            document.getElementById("cardIcon").innerHTML = "";
+        }
+    });
+
+    document.getElementById("btnPagar").addEventListener('click', function () {
+        let cantProductos = document.getElementById("cart-products").querySelectorAll("tr").length;
+        if (validFields() & transferenciaBancaria == true & cantProductos > 0 || validFields() & currentCard != "" & cantProductos > 0) {
+            showSuccessfullBuyMessage();
+        } else if (validFields() & cantProductos == 0) {
+            showBuyErrorMessage("No se puede realizar la compra, no tienes productos en el carrito!");
+        }else if(validFields() & transferenciaBancaria == false & currentCard == ""){
+            showBuyErrorMessage("No se puede realizar la compra, no has seleccionado una forma de pago!");
+        }else{
+            showBuyErrorMessage("Hubo un error, revisa que todos los campos estén completos");
+        }
+    });
 
     if (currentUser != null) { //si está logueado carga el carrito
         fetch(VIDEOGAMES_URL)                   //
@@ -213,10 +495,18 @@ document.addEventListener("DOMContentLoaded", function (e) {
                 showCartCurrencySelector(CURRENCY_LIST); //muestro el selector de monedas.
             })
             .catch(err => console.log(err));
+
+        fetch(CART_BUY_URL)
+            .then(response => response.json())
+            .then(result => {
+                successfulBuyMessage = result.msg;
+            })
+            .catch(err => console.log(err));
+
     } else { //si no está logueado muestra un mensaje indicando que se inicie sesión
         document.getElementById("cart-container").innerHTML = `
-            <div class="border border-danger rounded m-3 text-center">
+            < div class="border border-danger rounded m-3 text-center" >
                 <p class="m-3">Para ver tu carrito debes <a href="index.html" class="text-info">Iniciar Sesión</a></p>
-            </div>`;
+            </div > `;
     }
 });
