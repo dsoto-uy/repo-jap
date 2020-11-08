@@ -449,3 +449,10 @@ width: 40%;
   .fa-cc-visa {
     color: #0157a2;
   }
+
+  /*PERFIL*/
+
+  #image {
+    /*display: block;  */ 
+    width: 100%;    
+  }

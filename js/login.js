@@ -44,12 +44,15 @@ function attachSignin(element) {
       currentUser ='{'+
                     '"firstName":"' + googleUser.getBasicProfile().getGivenName() +
                     '",  "lastName":"' + googleUser.getBasicProfile().getFamilyName() +
+                    '",  "age":"' + "" +
                     '", "email":"' + googleUser.getBasicProfile().getEmail() +
+                    '",  "phoneNumber":"' + "" +
+                    '", "profileImage":"' + googleUser.getBasicProfile().getImageUrl() +
                     '"}';
      // window.localStorage.clear();
       window.localStorage.setItem("currentUser", currentUser);
       /* document.getElementById('botonGoogle').innerText = "Sesión iniciada como: " +
-           googleUser.getBasicProfile().getName();  */
+           googleUser.getBasicProfile().getName(); */
       window.location.replace("home.html");
     }, function (error) {
       //alert(JSON.stringify(error, undefined, 2));
@@ -65,7 +68,10 @@ function loginWithForm() {
                     '{' +
                     '"firstName":"' + firstName +
                     '","lastName":"' + "" +
+                    '",  "age":"' + "" +
                     '", "email":"' + email +
+                    '",  "phoneNumber":"' + "" +
+                    '",  "profileImage":"' + "" +
                     '"}';
    
   window.localStorage.setItem("currentUser", currentUser);

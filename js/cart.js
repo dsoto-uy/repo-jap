@@ -505,8 +505,8 @@ document.addEventListener("DOMContentLoaded", function (e) {
 
     } else { //si no está logueado muestra un mensaje indicando que se inicie sesión
         document.getElementById("cart-container").innerHTML = `
-            < div class="border border-danger rounded m-3 text-center" >
+            <div class="border border-danger rounded m-3 text-center" >
                 <p class="m-3">Para ver tu carrito debes <a href="index.html" class="text-info">Iniciar Sesión</a></p>
-            </div > `;
+            </div> `;
     }
 });
