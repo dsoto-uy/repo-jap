@@ -1,4 +1,3 @@
-const VIDEOGAMES_URL = "https://japdevdep.github.io/ecommerce-api/cart/654.json"
 const DOLAR = "USD"; //código de la moneda DOLAR
 const PESO_UY = "UYU"; // código de la moneda PESOS
 const CAMBIO_DOLAR_UYU = 40; //valor de 1 dolar en pesos, se usa para las conversiones
@@ -487,7 +486,7 @@ document.addEventListener("DOMContentLoaded", function (e) {
     });
 
     if (currentUser != null) { //si está logueado carga el carrito
-        fetch(VIDEOGAMES_URL)                   //
+        fetch(CART_INFO_URL)                   //
             .then(response => response.json())  //obtengo la lista de videojuegos
             .then(result => {                   //
                 showCartProductsAndTotalCost(result.articles) //muestro los productos y costos totales.
